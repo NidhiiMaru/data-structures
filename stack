@@ -27,13 +27,8 @@ int pop(int stack[]){
 }
 void display(int stack[]){
     int i;
-    if(top==-1){
-        printf("\n stack empty");
-    }
-    else{
         for(i=top;i>=0;i--){
-            printf("\n %d",stack[i]);
-        }
+        printf("\n %d",stack[i]);
     }
 }
     
