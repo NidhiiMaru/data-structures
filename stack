@@ -2,9 +2,9 @@
 #include<conio.h>
 #include<stdlib.h>
 #define MAX 5
-int stack[MAX];
+int stack[MAX];//global declaration
 int top=-1;
-void push(int stack[],int val){
+void push(int val){
     if(top==MAX-1){
         printf("\n stack overflow");
     }
@@ -13,7 +13,7 @@ void push(int stack[],int val){
         stack[top]=val;
     }
 }
-int pop(int stack[]){
+int pop(){
     int val;
     if(top==-1){
         printf("\n stack empty");
@@ -25,14 +25,14 @@ int pop(int stack[]){
         return val;
     }
 }
-void display(int stack[]){
+void display(){
     int i;
         for(i=top;i>=0;i--){
         printf("\n %d",stack[i]);
     }
 }
     
-int peek(int stack[]){
+int peek(){
     if(top==-1){
         printf("\n stack empty");
         return -1;
@@ -51,20 +51,20 @@ void main()
         case 1:
               printf("Enter value to push: ");
               scanf("%d", &val);
-              push(stack, val);
+              push(val);
               break;
         case 2:
-              val = pop(stack);
+              val = pop();
               if (val != -1)
               printf("Popped value = %d", val);
               break;
         case 3:
-              val = peek(stack);
+              val = peek();
               if (val != -1)
               printf("\nTop value = %d", val);
               break;
         case 4: 
-              display(stack);
+              display();
               break;
         case 5:
               exit(0);
