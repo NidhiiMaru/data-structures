@@ -55,12 +55,10 @@ void main()
               break;
         case 2:
               val = pop();
-              if (val != -1)
               printf("Popped value = %d", val);
               break;
         case 3:
               val = peek();
-              if (val != -1)
               printf("\nTop value = %d", val);
               break;
         case 4: 
