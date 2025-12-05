@@ -43,7 +43,7 @@ void reverse(char og[],char res[]){
 }
 void itp(){
     int i=0,j=0;
-    char temp[100];
+
     reverse(infix,infixrev);
     char x;
     while(infixrev[i]!='\0'){
@@ -71,13 +71,14 @@ void itp(){
         prefix[j++]=pop();
     }
     prefix[j]='\0';
-    reverse(prefix,temp);
-    printf("prefix exp:%s",temp);
+    
 }
 
 void main(){
+    char temp[100];
     printf("enter infix exp");
     scanf("%s",infix);
     itp();
-    
+    reverse(prefix,temp);
+    printf("prefix exp:%s",temp);
 }
