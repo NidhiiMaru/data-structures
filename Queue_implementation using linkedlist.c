@@ -48,10 +48,7 @@ void display() {
 void main() {
     int ch, val;
     while (ch!=-1) {
-        printf("1. Enqueue\n");
-        printf("2. Dequeue\n");
-        printf("3. Display\n");
-        printf("-1. Exit\n");
+        printf("1. Enqueue 2. Dequeue 3. Display -1. Exit");
         printf("Enter choice: ");
         scanf("%d", &ch);
         switch (ch) {
