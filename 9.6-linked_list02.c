@@ -1,134 +1,235 @@
 #include <stdio.h>
-#include<conio.h>
-#include<stdlib.h>
-struct Node{
+#include <conio.h>
+#include <stdlib.h>
+
+struct Node {
     int data;
     struct Node *next;
-}*start,*temp;
+} *start, *temp;
 
-void create(){
+// ----------------------------------
+// CREATE (your version, unchanged)
+// ----------------------------------
+void create() {
     struct Node *newnode;
-    newnode=(struct Node *)malloc(sizeof(struct Node));
+    newnode = (struct Node *)malloc(sizeof(struct Node));
     printf("enter data ");
-    scanf("%d",&newnode->data);
-    newnode->next=NULL;
-    if(start==NULL){
-        start=newnode;
-        temp=start;
-    }
-    else{
-        temp->next=newnode;
-        temp=newnode;
+    scanf("%d", &newnode->data);
+    newnode->next = NULL;
+
+    if (start == NULL) {
+        start = newnode;
+        temp = start;
+    } else {
+        temp->next = newnode;
+        temp = newnode;
     }
 }
-void display(){
-    temp=start;
-    if(start==NULL){
-        printf("no elements added");
-    }
-    else{
+
+// ----------------------------------
+// DISPLAY FORWARD
+// ----------------------------------
+void display() {
+    temp = start;
+    if (start == NULL) {
+        printf("no elements added\n");
+    } else {
         printf("elements: ");
-        while(temp->next!=NULL){
-            printf("%d\t",temp->data);
-            temp=temp->next;
+        while (temp != NULL) {
+            printf("%d\t", temp->data);
+            temp = temp->next;
         }
-        printf("%d\t",temp->data);
         printf("\n");
     }
 }
 
-void insert_at_position() {
-    int pos, i = 1;
-    struct Node *newnode, *p;
-    newnode = (struct Node *)malloc(sizeof(struct Node));
-    printf("Enter data: ");
-    scanf("%d", &newnode->data);
-    newnode->next = NULL;
+// ----------------------------------
+// REVERSE DISPLAY (using recursion)
+// ----------------------------------
+void reverse_recursive(struct Node *node) {
+    if (node == NULL) return;
+    reverse_recursive(node->next);
+    printf("%d\t", node->data);
+}
 
-    printf("Enter position to insert: ");
+void reverse_display() {
+    if (start == NULL) {
+        printf("no elements added\n");
+        return;
+    }
+    printf("reverse: ");
+    reverse_recursive(start);
+    printf("\n");
+}
+
+// ----------------------------------
+// COUNT NODES
+// ----------------------------------
+int count() {
+    int c = 0;
+    temp = start;
+    while (temp != NULL) {
+        c++;
+        temp = temp->next;
+    }
+    return c;
+}
+
+// ----------------------------------
+// INSERT BEFORE A VALUE
+// ----------------------------------
+void insert_before() {
+    struct Node *p, *newnode;
+    int val;
+
+    newnode = (struct Node *)malloc(sizeof(struct Node));
+    printf("enter data");
+    scanf("%d", &newnode->data);
+
+    printf("value before which you want to insert");
+    scanf("%d", &val);
+
+    temp = start;
+    p = start;
+
+    while (temp != NULL && temp->data != val) {
+        p = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Value not found\n");
+        return;
+    }
+
+    if (temp == start) {     // insert at beginning
+        newnode->next = start;
+        start = newnode;
+    } else {
+        p->next = newnode;
+        newnode->next = temp;
+    }
+}
+
+// ----------------------------------
+// INSERT AFTER A VALUE
+// ----------------------------------
+void insert_after() {
+    struct Node *newnode;
+    int val;
+
+    newnode = (struct Node *)malloc(sizeof(struct Node));
+    printf("enter data");
+    scanf("%d", &newnode->data);
+
+    printf("value after which you want to insert");
+    scanf("%d", &val);
+
+    temp = start;
+    while (temp != NULL && temp->data != val) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Value not found\n");
+        return;
+    }
+
+    newnode->next = temp->next;
+    temp->next = newnode;
+}
+
+// ----------------------------------
+// INSERT AT POSITION (1-based index)
+// ----------------------------------
+void insert_at_position() {
+    int pos, i=1;
+    struct Node *newnode, *p = start;
+
+    printf("enter position ");
     scanf("%d", &pos);
 
-    if (pos == 1) { // insert at beginning
+    newnode = (struct Node *)malloc(sizeof(struct Node));
+    printf("enter data ");
+    scanf("%d", &newnode->data);
+
+    if (pos == 1) {
         newnode->next = start;
         start = newnode;
         return;
     }
 
-    temp = start;
-    while (i < pos - 1 && temp != NULL) {
-        temp = temp->next;
+    while (i < pos - 1 && p != NULL) {
+        p = p->next;
         i++;
     }
 
-    if (temp == NULL) {
-        printf("Position out of range\n");
-        free(newnode);
-    } else {
-        newnode->next = temp->next;
-        temp->next = newnode;
+    if (p == NULL) {
+        printf("Invalid position\n");
+        return;
     }
+
+    newnode->next = p->next;
+    p->next = newnode;
 }
 
-void delete_node(){
+// ----------------------------------
+// DELETE NODE BY VALUE
+// ----------------------------------
+void delete_node() {
     int val;
     printf("enter val to delete");
-    scanf("%d",&val);
+    scanf("%d", &val);
+
     struct Node *p;
-    temp=p=start;
-    while(temp!=NULL && temp->data!=val){
-            p=temp;
-            temp=temp->next;
-        }
-    if(temp==start){
-      start=temp->next;
+    temp = p = start;
+
+    while (temp != NULL && temp->data != val) {
+        p = temp;
+        temp = temp->next;
     }
-    else if(temp==NULL) return;
-    else{
-        p->next=temp->next;
+
+    if (temp == NULL) return;
+
+    if (temp == start) {
+        start = temp->next;
+    } else {
+        p->next = temp->next;
     }
+
     free(temp);
 }
-void search() {
-    int val, pos = 1;
-    printf("Enter value to search: ");
-    scanf("%d", &val);
-    temp = start;
 
-    while (temp != NULL) {
-        if (temp->data == val) {
-            printf("Value %d found at position %d\n", val, pos);
-            return;
-        }
-        temp = temp->next;
-        pos++;
-    }
-    printf("Value not found\n");
-}
+// ----------------------------------
+// MAIN MENU
+// ----------------------------------
+void main() {
+    int choice = 0;
 
-void main(){
-    int choice=0;
-    while(choice!=6){
-        printf("enter 1:create 2:display 3:insert 4:search 5:delete 6:exit ");
-        scanf("%d",&choice);
-        switch(choice){
-            case 1:
-            create();
-            break;
-            case 2:
-            display();
-            break;
-            case 3:
-            insert_at_position();
-            break;
-            case 4:
-            search();
-            break;
-            case 5:
-            delete_node();
-            break;
-            case 6:
-            exit(0);
-            break;
+    while (choice != 9) {
+        printf("\nenter:\n"
+               "1:create\n"
+               "2:display\n"
+               "3:reverse display\n"
+               "4:insert before\n"
+               "5:insert after\n"
+               "6:insert at position\n"
+               "7:delete\n"
+               "8:count nodes\n"
+               "9:exit\n");
+
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: create(); break;
+            case 2: display(); break;
+            case 3: reverse_display(); break;
+            case 4: insert_before(); break;
+            case 5: insert_after(); break;
+            case 6: insert_at_position(); break;
+            case 7: delete_node(); break;
+            case 8: printf("Length = %d\n", count()); break;
+            case 9: exit(0);
         }
     }
 }
