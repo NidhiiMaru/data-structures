@@ -199,6 +199,47 @@ void delete_node() {
 
     free(temp);
 }
+// ----------------------------------
+// DELETE NODE BY position
+// 
+void delete_at_position() {
+    int pos, i = 1;
+    struct Node *p = start, *temp;
+
+    printf("Enter position to delete: ");
+    scanf("%d", &pos);
+
+    // Case 1: Empty list
+    if (start == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    // Case 2: Delete 1st node
+    if (pos == 1) {
+        temp = start;
+        start = start->next;
+        free(temp);
+        return;
+    }
+
+    // Move p to (pos-1)th node
+    while (i < pos - 1 && p != NULL) {
+        p = p->next;
+        i++;
+    }
+
+    // If invalid position
+    if (p == NULL || p->next == NULL) {
+        printf("Invalid position\n");
+        return;
+    }
+
+    // p = node before the one to delete
+    temp = p->next;        // node to delete
+    p->next = temp->next;  // bypass it
+    free(temp);
+}
 
 // ----------------------------------
 // MAIN MENU
