@@ -1,0 +1,94 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 5
+
+int queue[MAX];
+int front = -1, rear = -1;
+
+// Enqueue – Add print job
+void enqueue(int job) {
+
+    if (rear == MAX - 1) {
+        printf("\n OVERFLOW! Print queue is full.\n");
+        return;
+    }
+
+    // First insertion
+    if (front == -1 && rear == -1) {
+        front = rear = 0;
+        queue[rear] = job;
+    }
+    else {
+        rear++;
+        queue[rear] = job;
+    }
+
+    printf("Added Print Job: %d\n", job);
+}
+
+// Dequeue – Print job
+void dequeue() {
+    if (front == -1 || front > rear) {
+        printf("Print Queue is EMPTY! No job to print.\n");
+        return;
+    }
+
+    printf("Printing Job: %d\n", queue[front]);
+    front++;
+
+    // Reset queue when empty
+    if (front > rear)
+        front = rear = -1;
+}
+
+// Display pending jobs
+void display() {
+    if (front == -1 || front > rear) {
+        printf("No pending print jobs.\n");
+        return;
+    }
+
+    printf("Pending Jobs: ");
+    for (int i = front; i <= rear; i++)
+        printf("%d ", queue[i]);
+    printf("\n");
+}
+
+int main() {
+    int choice, job;
+
+    while (1) {
+        printf("\n--- PRINT QUEUE SIMULATION ---\n");
+        printf("1. Add Print Job\n");
+        printf("2. Print Next Job\n");
+        printf("3. View Pending Jobs\n");
+        printf("4. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            printf("Enter job number: ");
+            scanf("%d", &job);
+            enqueue(job);
+            break;
+
+        case 2:
+            dequeue();
+            break;
+
+        case 3:
+            display();
+            break;
+
+        case 4:
+            exit(0);
+
+        default:
+            printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
