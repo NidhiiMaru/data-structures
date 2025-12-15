@@ -4,60 +4,60 @@
 #define MAX 100
 
 int heap[MAX];
-int n = 0;   // current heap size
+int n = 0;
 
-// ------------------------------------
-// HEAPIFY DOWN
-// ------------------------------------
-void heapifyDown(int i) {
+/* ---------------- HEAPIFY (DOWN) ---------------- */
+void heapify(int a[], int size, int i) {
     int largest = i;
     int left = 2 * i;
     int right = 2 * i + 1;
 
-    if (left <= n && heap[left] > heap[largest])
+    if (left <= size && a[left] > a[largest])
         largest = left;
 
-    if (right <= n && heap[right] > heap[largest])
+    if (right <= size && a[right] > a[largest])
         largest = right;
 
     if (largest != i) {
-        int temp = heap[i];
-        heap[i] = heap[largest];
-        heap[largest] = temp;
+        int temp = a[i];
+        a[i] = a[largest];
+        a[largest] = temp;
 
-        heapifyDown(largest);
+        heapify(a, size, largest);
     }
 }
 
-// ------------------------------------
-// HEAPIFY UP
-// ------------------------------------
+/* ---------------- BUILD HEAP ---------------- */
+void buildHeap() {
+    int i;
+    for (i = n / 2; i >= 1; i--) {
+        heapify(heap, n, i);
+    }
+    printf("Heap built successfully!\n");
+}
+
+/* ---------------- HEAPIFY UP ---------------- */
 void heapifyUp(int i) {
-    while (i > 1 && heap[i] > heap[i/2]) {
+    while (i > 1 && heap[i] > heap[i / 2]) {
         int temp = heap[i];
-        heap[i] = heap[i/2];
-        heap[i/2] = temp;
+        heap[i] = heap[i / 2];
+        heap[i / 2] = temp;
         i = i / 2;
     }
 }
 
-// ------------------------------------
-// INSERT
-// ------------------------------------
+/* ---------------- INSERT ---------------- */
 void insert(int val) {
     if (n == MAX - 1) {
-        printf("Heap overflow!\n");
+        printf("Heap Overflow!\n");
         return;
     }
-
-    heap[++n] = val;   // insert at last
-    heapifyUp(n);      // fix heap order
+    heap[++n] = val;
+    heapifyUp(n);
     printf("Inserted %d\n", val);
 }
 
-// ------------------------------------
-// DELETE ROOT (MAX ELEMENT)
-// ------------------------------------
+/* ---------------- DELETE ROOT ---------------- */
 void deleteRoot() {
     if (n == 0) {
         printf("Heap is empty!\n");
@@ -65,63 +65,65 @@ void deleteRoot() {
     }
 
     printf("Deleted root: %d\n", heap[1]);
-
-    heap[1] = heap[n];   // replace root with last element
-    n--;
-
-    heapifyDown(1);
+    heap[1] = heap[n--];
+    heapify(heap, n, 1);
 }
 
-// ------------------------------------
-// DELETE ANY POSITION
-// ------------------------------------
-void deleteAtPosition(int pos) {
-    if (pos < 1 || pos > n) {
-        printf("Invalid position!\n");
+/* ---------------- DISPLAY ---------------- */
+void display() {
+    int i;
+    if (n == 0) {
+        printf("Heap is empty!\n");
         return;
     }
-
-    printf("Deleting element %d at position %d\n", heap[pos], pos);
-
-    heap[pos] = heap[n];   // replace with last element
-    n--;
-
-    // decide whether to move up or down
-    if (pos > 1 && heap[pos] > heap[pos/2])
-        heapifyUp(pos);
-    else
-        heapifyDown(pos);
+    printf("Heap elements: ");
+    for (i = 1; i <= n; i++)
+        printf("%d ", heap[i]);
+    printf("\n");
 }
 
-// ------------------------------------
-// DISPLAY HEAP
-// ------------------------------------
-void display() {
+/* ---------------- HEAP SORT ---------------- */
+void heapSort() {
+    int i, temp;
+    int originalSize = n;
+
     if (n == 0) {
         printf("Heap is empty!\n");
         return;
     }
 
-    printf("Heap elements: ");
-    for (int i = 1; i <= n; i++)
+    buildHeap();   // Step 1
+
+    for (i = n; i >= 2; i--) {   // Step 2
+        temp = heap[1];
+        heap[1] = heap[i];
+        heap[i] = temp;
+
+        n--;
+        heapify(heap, n, 1);
+    }
+
+    n = originalSize;
+
+    printf("Sorted Array (Ascending Order): ");
+    for (i = 1; i <= n; i++)
         printf("%d ", heap[i]);
     printf("\n");
 }
 
-// ------------------------------------
-// MAIN MENU
-// ------------------------------------
+/* ---------------- MAIN ---------------- */
 int main() {
-    int choice, val, pos;
+    int choice, val;
 
     while (1) {
-        printf("\n--------- MAX HEAP MENU ---------\n");
+        printf("\n------ MAX HEAP MENU ------\n");
         printf("1. Insert\n");
         printf("2. Delete Root\n");
-        printf("3. Delete at Position\n");
-        printf("4. Display\n");
-        printf("5. Exit\n");
-        printf("--------------------------------\n");
+        printf("3. Display Heap\n");
+        printf("4. Build Heap\n");
+        printf("5. Heap Sort\n");
+        printf("6. Exit\n");
+        printf("---------------------------\n");
         printf("Enter choice: ");
         scanf("%d", &choice);
 
@@ -137,16 +139,18 @@ int main() {
             break;
 
         case 3:
-            printf("Enter position to delete: ");
-            scanf("%d", &pos);
-            deleteAtPosition(pos);
-            break;
-
-        case 4:
             display();
             break;
 
+        case 4:
+            buildHeap();
+            break;
+
         case 5:
+            heapSort();
+            break;
+
+        case 6:
             exit(0);
 
         default:
