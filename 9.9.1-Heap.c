@@ -35,7 +35,34 @@ void buildHeap() {
     }
     printf("Heap built successfully!\n");
 }
+/* ---------------- HEAP SORT ---------------- */
+void heapSort() {
+    int i, temp;
+    int originalSize = n;
 
+    if (n == 0) {
+        printf("Heap is empty!\n");
+        return;
+    }
+
+    buildHeap();   // Step 1
+
+    for (i = n; i >= 2; i--) {   // Step 2
+        temp = heap[1];
+        heap[1] = heap[i];
+        heap[i] = temp;
+
+        n--;
+        heapify(heap, n, 1);
+    }
+
+    n = originalSize;
+
+    printf("Sorted Array (Ascending Order): ");
+    for (i = 1; i <= n; i++)
+        printf("%d ", heap[i]);
+    printf("\n");
+}
 /* ---------------- HEAPIFY UP ---------------- */
 void heapifyUp(int i) {
     while (i > 1 && heap[i] > heap[i / 2]) {
@@ -82,34 +109,7 @@ void display() {
     printf("\n");
 }
 
-/* ---------------- HEAP SORT ---------------- */
-void heapSort() {
-    int i, temp;
-    int originalSize = n;
 
-    if (n == 0) {
-        printf("Heap is empty!\n");
-        return;
-    }
-
-    buildHeap();   // Step 1
-
-    for (i = n; i >= 2; i--) {   // Step 2
-        temp = heap[1];
-        heap[1] = heap[i];
-        heap[i] = temp;
-
-        n--;
-        heapify(heap, n, 1);
-    }
-
-    n = originalSize;
-
-    printf("Sorted Array (Ascending Order): ");
-    for (i = 1; i <= n; i++)
-        printf("%d ", heap[i]);
-    printf("\n");
-}
 
 /* ---------------- MAIN ---------------- */
 int main() {
